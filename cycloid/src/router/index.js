@@ -3,6 +3,18 @@ import MainView from '../views/MainView.vue'
 import JoinView from '../views/JoinView.vue'
 import LoginView from '../views/LoginView.vue'
 import Trashbox from '../views/Trashbox.vue'
+import { useUserStore } from '@/stores/user'
+
+const beforeAuth = isAuthenticated => async (from, to, next) => {
+  const user = useUserStore();
+
+  if ((user.getIsAuth && isAuthenticated) || (!user.getIsAuth && !isAuthenticated)) {
+    console.log('check');
+    return next();
+  } else {
+    return next('/login');
+  }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,7 +22,8 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: MainView
+      component: MainView,
+      beforeEnter: beforeAuth(true),
     },
     {
       path: '/login',
