@@ -21,7 +21,7 @@
           <!-- 재생목록 존재 시 표시 -->
         </div>
         <div class="itemlist">
-
+          <item :item="item"></item>
         </div>
       </div>
       <div class="playlist">
@@ -34,11 +34,13 @@
 <script>
 import axios from 'axios';
 import { useFileStore } from '../stores/file.js';
+import item from '@/components/item.vue';
 
 export default {
   data() {
     return {
       fileStore: useFileStore(),
+      itemList: undefined,
 
       user: "",
     }
@@ -71,6 +73,7 @@ export default {
       axios.get('https://api.example.com/itemlist')
       .then((response) => {
         console.log('item list', response.data);
+        this.itemList = response.data
       })
     },
   },
